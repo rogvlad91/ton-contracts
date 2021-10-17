@@ -19,7 +19,6 @@ contract toDoList {
     }
     mapping  (int8 => task) public assoc;
     int8 public key = 0;
-    int8[] keys;
     string[] public nameArr;
     // Contract can have a `constructor` – function that will be called when contract will be deployed to the blockchain.
     // In this example constructor adds current time to the instance variable.
@@ -46,7 +45,6 @@ contract toDoList {
 	}
     function addTask (string name, bool flagTask) public checkOwnerAndAccept{
         uint32 newTaskTime = now;
-        keys.push(key);
         key++;
         assoc[key].name = name;
         assoc[key].taskTime = newTaskTime;
