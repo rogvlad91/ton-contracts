@@ -17,7 +17,9 @@ contract toDoList {
         uint32 taskTime;
         bool flag;
     }
-    mapping  (uint => task) public assoc;
+    mapping  (int8 => task) public assoc;
+    int8 public key = 0;
+    int8[] keys;
     string[] public nameArr;
     // Contract can have a `constructor` – function that will be called when contract will be deployed to the blockchain.
     // In this example constructor adds current time to the instance variable.
@@ -44,40 +46,39 @@ contract toDoList {
 	}
     function addTask (string name, bool flagTask) public checkOwnerAndAccept{
         uint32 newTaskTime = now;
-        nameArr.push(name);
-        uint taskKey = nameArr.length;
-        assoc[taskKey].name = name;
-        assoc[taskKey].taskTime = newTaskTime;
-        assoc[taskKey].flag = flagTask;
+        keys.push(key);
+        key++;
+        assoc[key].name = name;
+        assoc[key].taskTime = newTaskTime;
+        assoc[key].flag = flagTask;
     }
     function getOpenTasks () public checkOwnerAndAccept returns(uint8) {
        uint8 count = 0;
-       for (uint8 i = 1; i <= nameArr.length; i++){
+       for (int8 i = 1; i <= key; i++){
            if (!assoc[i].flag) {
                count++;
            }
        }
        return count;
     }
-    function getTaskList () public checkOwnerAndAccept returns(string[]) {
-        return nameArr;
+    function getTaskList () public checkOwnerAndAccept returns(mapping  (int8 => task)) {
+        return assoc;
     }
-    function getTaskDescription(uint8 key) public checkOwnerAndAccept returns(string, uint32, bool) {
-        require(key > 0 && key <= nameArr.length);
-        return (assoc[key].name,
-        assoc[key].taskTime,
-        assoc[key].flag);
+    function getTaskDescription(int8 taskNum) public checkOwnerAndAccept returns(string, uint32, bool) {
+        require(taskNum > 0 && taskNum <= key);
+        return (assoc[taskNum].name,
+        assoc[taskNum].taskTime,
+        assoc[taskNum].flag);
+        
     }
-    function deleteTask(uint8 key) public checkOwnerAndAccept {
-        require(key > 0 && key <= nameArr.length);
-        delete assoc[key].name;
-        delete assoc[key].taskTime;
-        delete assoc[key];
-        delete nameArr[key];
+    function deleteTask(int8 taskNum) public checkOwnerAndAccept {
+        require(taskNum > 0 && taskNum <= key);
+        delete assoc[taskNum];
+        key--;
     }
-    function taskDone(uint8 key) public checkOwnerAndAccept {
-        require(key > 0 && key <= nameArr.length);
-        require(!assoc[key].flag);
-        assoc[key].flag = true;
+    function taskDone(int8 taskNum) public checkOwnerAndAccept {
+        require(taskNum > 0 && taskNum <= key);
+        require(!assoc[taskNum].flag);
+        assoc[taskNum].flag = true;
     }
 }
