@@ -1,0 +1,93 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "addSong",
+			"inputs": [
+				{"name":"name","type":"string"},
+				{"name":"band","type":"string"},
+				{"name":"rating","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getTokenOwner",
+			"inputs": [
+				{"name":"songId","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"}
+			]
+		},
+		{
+			"name": "getTokenInfo",
+			"inputs": [
+				{"name":"songId","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"name","type":"string"},
+				{"name":"band","type":"string"},
+				{"name":"rating","type":"uint256"}
+			]
+		},
+		{
+			"name": "putForSale",
+			"inputs": [
+				{"name":"songId","type":"uint256"},
+				{"name":"price","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"}
+			]
+		},
+		{
+			"name": "changePrice",
+			"inputs": [
+				{"name":"songId","type":"uint256"},
+				{"name":"newPrice","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "changeRating",
+			"inputs": [
+				{"name":"songId","type":"uint256"},
+				{"name":"newRating","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "changeSongOwner",
+			"inputs": [
+				{"name":"songId","type":"uint256"},
+				{"name":"newOwnerAddress","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"components":[{"name":"name","type":"string"},{"name":"band","type":"string"},{"name":"rating","type":"uint256"}],"name":"songs","type":"tuple[]"},
+		{"name":"songToOwner","type":"map(uint256,uint256)"},
+		{"name":"priceOfSong","type":"map(uint256,uint256)"}
+	]
+}
