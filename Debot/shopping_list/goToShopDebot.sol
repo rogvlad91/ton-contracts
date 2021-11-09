@@ -37,7 +37,7 @@ contract goToShopDebot is ADebotListInit  {
             [
                 MenuItem("Show shopping list","",tvm.functionId(getShoppingList)),
                 MenuItem("Delete purchase","",tvm.functionId(deletePurchase)),
-                MenuItem("Buy","",tvm.functionId(buy))
+                MenuItem("Buy","",tvm.functionId(buyToKnowPurchaseId))
             ]
         );
     }
@@ -102,37 +102,32 @@ function getShoppingList(uint32 index) public view {
             }(uint32(num));
     }
 
-    function buy(uint32 index) public {
+    function buyToKnowPurchaseId(uint32 index) public {
         index = index;
         if (m_stat.paidCount + m_stat.unpaidCount > 0) {
-            Terminal.input(tvm.functionId(buy_), "Enter purchase number :", true);
+            Terminal.input(tvm.functionId(buyToAskPerson), "Enter purchase number :", true);
         } else {
             Terminal.print(0, "Sorry, you have no purchases to make");
             _menu();
         }
     }
 
-    function buy_(string idOfBought) public {
+    function buyToAskPerson(string idOfBought) public {
         (uint256 num,) = stoi(idOfBought);
         m_purchaseId = uint32(num);
-        if (!purchaseMapping[m_purchaseId].isBought){
         ConfirmInput.get(tvm.functionId(buyToKnowPrice),"Is this the purchase you wanted to make?");
-        } else {
-            Terminal.print(0, "Sorry, this purchase is made already");
-            _menu();
-        }
-    }
+        } 
     
-     function buyToKnowPrice(bool isItBought) public {
-        if (isItBought){
+     function buyToKnowPrice(bool isItThePurchase) public {
+        if (isItThePurchase){
         Terminal.input(tvm.functionId(buy_), "Enter purchase price :", true);
         } else {
-            Terminal.print(0, "Ok, proceed mate");
+            Terminal.print(0, "Ok, proceed along");
             _menu();
         }
     }
 
-    function buy__(string price) public view {
+    function buy_(string price) public view {
         (uint256 num,) = stoi(price);
         uint32 priceForPurchase = uint32(num);
         optional(uint256) pubkey = 0;
@@ -145,7 +140,7 @@ function getShoppingList(uint32 index) public view {
                 expire: 0,
                 callbackId: tvm.functionId(onSuccess),
                 onErrorId: tvm.functionId(onError)
-            }(m_purchaseId, value);
+            }(m_purchaseId, priceForPurchase);
     }
 
 }
